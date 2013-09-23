@@ -1,0 +1,47 @@
+---
+- name: install python-software-properties so we can add PPAs
+  action: apt pkg=$item state=installed update_cache=true cache_valid_time=300
+  with_items:
+    - python-software-properties
+    - python-pycurl
+
+- name: add sane nodejs repo
+  apt_repository: repo='ppa:chris-lea/node.js'
+
+- name: install node
+  action: apt pkg=$item update_cache=yes force=yes
+  with_items:
+    - nodejs
+
+- name: install apt dependencies 
+  action: apt pkg=$item update_cache=yes cache_valid_time=300
+  with_items:
+    - build-essential
+    - git
+    - curl
+    - unzip
+
+- name: download ghost
+  get_url: url=$ghost_zip_url dest=/home/ubuntu/ghost.zip
+
+- name: extract ghost
+  shell: unzip /home/ubuntu/ghost.zip -d /opt/ghost creates=/opt/ghost
+
+- name: add ghost config
+  template: >
+        src=config.js
+        dest=/opt/ghost/config.js
+  notify: restart ghost
+
+- name: install npm dependencies
+  npm: path=/opt/ghost production=true
+
+- name: install npm dependencies
+  npm: name=mysql path=/opt/ghost production=true
+
+- name: setup ghost-worker upstart config
+  template: src=ghost-worker.upstart.conf dest=/etc/init/ghost-worker.conf
+
+- name: setup ghost upstart config
+  template: src=ghost.upstart.conf dest=/etc/init/ghost.conf
+  notify: restart ghost

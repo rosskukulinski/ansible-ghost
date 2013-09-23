@@ -1,0 +1,2 @@
+- name: restart ghost
+  service: name=ghost state=restarted

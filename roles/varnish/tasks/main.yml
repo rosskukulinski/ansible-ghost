@@ -1,0 +1,12 @@
+- name: install varnish
+  apt: pkg=varnish update_cache=true cache_valid_time=300
+
+- name: update default varnish options
+  action: template src=varnish-default dest=/etc/default/varnish
+  notify: 
+    - restart varnish
+
+- name: add the varnish vcl 
+  action: template src=default.vcl dest=/etc/varnish/default.vcl
+  notify: 
+    - restart varnish

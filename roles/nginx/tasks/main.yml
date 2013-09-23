@@ -1,0 +1,18 @@
+- name: install python-software-properties so we can add PPAs
+  action: apt pkg=$item state=installed update_cache=true cache_valid_time=300
+  with_items:
+    - python-software-properties
+
+- name: add stable nginx repo
+  apt_repository: repo='ppa:nginx/stable'
+
+- name: install nginx
+  apt: pkg=nginx update_cache=true
+
+- name: remove default nginx configuration
+  file: dest=/etc/nginx/sites-enabled/default state=absent
+  notify: restart nginx
+
+- name: add the ghost nginx configuration
+  action: template src=ghost.nginx.conf dest=/etc/nginx/sites-enabled/ghost
+  notify: restart nginx

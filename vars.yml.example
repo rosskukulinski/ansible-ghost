@@ -1,0 +1,6 @@
+---
+# ${ansible_p2p1.ipv4.address}
+fqdn: google.com # fully qualified domain name, ex: google.com
+mysql_password: super_secret!123
+ghost_zip_url: https://en.ghost.org/zip/ghost-0.3.0.zip
+

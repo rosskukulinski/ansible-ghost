@@ -1,0 +1,12 @@
+---
+- hosts: ghost
+  user: ubuntu
+  sudo: True
+  gather_facts: True
+  vars_files:
+    - vars.yml
+  roles:
+    - ghost
+    - mysql
+    - nginx
+    # - varnish
