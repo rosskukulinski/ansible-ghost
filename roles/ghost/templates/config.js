@@ -15,7 +15,7 @@ config = {
         database: {
             client: 'mysql',
             connection: {
-                host     : '127.0.0.1',
+                host     : 'localhost',
                 user     : 'root',
                 password : '$mysql_password',
                 database : 'ghost_production',
